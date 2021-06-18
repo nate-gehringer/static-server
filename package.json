@@ -1,0 +1,35 @@
+{
+  "author": {
+    "email": "ngehringer@gmail.com",
+    "name": "Nate Gehringer"
+  },
+  "description": "`static-server.js`: A fine HTTP server for static content by Backwater Systems",
+  "homepage": "https://backwater.systems",
+  "license": "UNLICENSED",
+  "name": "@backwater-systems/static-server",
+  "type": "module",
+  "version": "1.0.0",
+  "dependencies": {
+    "koa": "^2.13.1",
+    "koa-conditional-get": "^3.0.0",
+    "koa-etag": "^4.0.0",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "cpy-cli": "^3.1.1",
+    "del-cli": "^4.0.0",
+    "rollup": "^2.52.1"
+  },
+  "scripts": {
+    "build": "npm run build:production",
+    "build:development": "npm run clean:build && npm run build:development:javascript && npm run build:development:assets",
+    "build:development:assets": "cpy '**/*.json' '../dist/' --cwd 'src/' --parents",
+    "build:development:javascript": "cpy '**/*.js' '../dist/' --cwd 'src/' --parents",
+    "build:production": "npm run clean:build && npm run build:production:javascript && npm run build:production:assets",
+    "build:production:assets": "cpy '**/*.json' '../dist/' --cwd 'src/' --parents",
+    "build:production:javascript": "rollup --config rollup.config.js",
+    "clean": "npm run clean:build",
+    "clean:build": "del-cli dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
