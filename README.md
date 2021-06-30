@@ -7,34 +7,97 @@
 ## Usage
 
 ```sh
-[NODE_ENV=development] node static-server.js \
-  [${content_folder} = .] \
-  [${host_name} = localhost] \
-  [${port_number} = 8020] \
-  [${certificate_name} = localhost]
+[NODE_ENV=development] ./static-server.js \
+  . `# [root_folder]` \
+  localhost `# [host_name]` \
+  8020 `# [port_number]` \
+  localhost `# [certificate_name]`
 ```
+
+---
 
 ## Settings
 
+### Details
+
+| Name                                                                        | Default value |
+| --------------------------------------------------------------------------- | ------------- |
+| [Certificate name](#certificate_name)                                       | `localhost`   |
+| [File name extension / media type map](#file_name_extension_media_type_map) | `new Map()`   |
+| [Host name](#host_name)                                                     | `localhost`   |
+| [Port number](#port_number)                                                 | `8020`        |
+| [Root folder](#root_folder)                                                 | `.`           |
+
+- #### `certificate_name`
+
+    Given e.g., `localhost`, the following [certificate files](#self-signed-certificate-generation-example) are expected …
+    - `./localhost.key`: Private key
+    - `./localhost.csr`: Certificate signing request
+    - `./localhost.crt`: Certificate
+
+    > **Note:** If the certificate files cannot be read, the server uses HTTP instead of HTTPS.
+
+- #### `file_name_extension_media_type_map`
+
+    Custom specifications of file name extensions mapped to `Content-Type` HTTP header values. File name extensions not included in the map are set using [`Koa`’s internal file name extension–lookup mechanism](https://github.com/koajs/koa/blob/master/docs/api/response.md#responsetype-1).
+
+    E.g., the following data results in files with the file name extension `.mustache` being served with the HTTP header `Content-Type: text/plain` …
+
+    ```json
+    [
+      [ "mustache", "text/plain" ]
+    ]
+    ```
+    > **Note:** Files without a file name extension default to `Content-Type: text/plain`.
+
+- #### `host_name`
+
+    The host name to which the server is bound.
+
+- #### `port_number`
+
+    The port number to which the server is bound. Must be `80`, `443`, or in the range `1024` – `65535`.
+
+- #### `root_folder`
+
+    The relative path of the root folder served.
+
 ### Environment variables
 
-The `NODE_ENV` environment variable is respected if its value is `'development'` (default) or `'production'`.
+- The `NODE_ENV` environment variable is respected if its value is …
+
+    - `development` (default)
+    - `production`
 
 ### Command-line arguments
 
-| #   | Name             | Default value |
-| --: | ---------------- | ------------- |
-|   1 | Content folder   | `.`           |
-|   2 | Host name        | `localhost`   |
-|   3 | Port number      | `8020`        |
-|   4 | Certificate name | `localhost` ¹ |
+| #   | Name                                  |
+| --: | ------------------------------------- |
+|   1 | [Root folder](#root_folder)           |
+|   2 | [Host name](#host_name)               |
+|   3 | [Port number](#port_number)           |
+|   4 | [Certificate name](#certificate_name) |
 
-> ¹ **Note:** If the certificate files cannot be read, the server uses HTTP instead of HTTPS.
-> 
-> Given e.g., `localhost`, the following files are expected …
-> - `./localhost.key`: Private key
-> - `./localhost.csr`: Certificate signing request
-> - `./localhost.crt`: Certificate
+> **Note:** Command-line arguments override settings in the [configuration file](#configuration-file).
+
+### Configuration file
+
+Settings can be specified in a JSON file (`configuration.json`) located in the same folder as the server executable.
+
+The file should contain an object with any of the following (optional) properties …
+
+```json
+{
+  "certificate_name": string,
+  "file_name_extension_media_type_map": [ "${file_name_extension}": string, "${media_type}": string ][],
+  "host_name": string,
+  "port_number": number,
+  "root_folder": string
+}
+```
+> **Note:** Settings in the configuration file are overriden by [command-line arguments](#command-line-arguments), if specified.
+
+---
 
 ## HTTPS
 
@@ -48,7 +111,7 @@ The `NODE_ENV` environment variable is respected if its value is `'development'`
     ```
 2. Respond to the _Distinguished Name_ information prompts as appropriate.
 
-Adapted from <https://nodejs.org/api/tls.html#tls_tls_ssl_concepts>.
+> Adapted from <https://nodejs.org/api/tls.html#tls_tls_ssl_concepts>.
 
 ---
 
