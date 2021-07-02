@@ -3,11 +3,11 @@
         …[  [ … [    [[∞]]    ] … ]  ]…
     # Backwater Systems ◦ `static-server.js`
     A fine HTTP(S) server for static content
-    _powered by [`Koa`](https://koajs.com/)_
+    _Powered by [`Koa`](https://koajs.com/)_
                       ---
-  written by [Nate Gehringer](mailto:ngehringer@gmail.com)
+  © 2020 – 2021 [Nate Gehringer](mailto:ngehringer@gmail.com)
                        ◦
-  © 2020 [Backwater Systems](https://backwater.systems)
+  [Backwater Systems](https://backwater.systems/)
         …[  [ … [    [[∞]]    ] … ]  ]…
 
   **Usage:** `[NODE_ENV=development] ./static-server.js . `# [root_folder]` localhost `# [host_name]` 8020 `# [port_number]` localhost `# [certificate_name]`

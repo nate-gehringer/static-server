@@ -20,15 +20,9 @@
 
 ### Details
 
-| Name                                                                        | Default value |
-| --------------------------------------------------------------------------- | ------------- |
-| [Certificate name](#certificate_name)                                       | `localhost`   |
-| [File name extension / media type map](#file_name_extension_media_type_map) | `new Map()`   |
-| [Host name](#host_name)                                                     | `localhost`   |
-| [Port number](#port_number)                                                 | `8020`        |
-| [Root folder](#root_folder)                                                 | `.`           |
-
 - #### `certificate_name`
+
+    **Default value:** `localhost`
 
     Given e.g., `localhost`, the following [certificate files](#self-signed-certificate-generation-example) are expected …
     - `./localhost.key`: Private key
@@ -39,7 +33,9 @@
 
 - #### `file_name_extension_media_type_map`
 
-    Custom specifications of file name extensions mapped to `Content-Type` HTTP header values. File name extensions not included in the map are set using [`Koa`’s internal file name extension–lookup mechanism](https://github.com/koajs/koa/blob/master/docs/api/response.md#responsetype-1).
+    **Default value:** `new Map()`
+
+    Custom specifications of file name extensions mapped to `Content-Type` HTTP header values. Values for file name extensions not included in the map are determined via [`Koa`’s internal file name extension–lookup mechanism](https://github.com/koajs/koa/blob/master/docs/api/response.md#responsetype-1).
 
     E.g., the following data results in files with the file name extension `.mustache` being served with the HTTP header `Content-Type: text/plain` …
 
@@ -52,13 +48,19 @@
 
 - #### `host_name`
 
+    **Default value:** `localhost`
+
     The host name to which the server is bound.
 
 - #### `port_number`
 
+    **Default value:** `8020`
+
     The port number to which the server is bound. Must be `80`, `443`, or in the range `1024` – `65535`.
 
 - #### `root_folder`
+
+    **Default value:** `.`
 
     The relative path of the root folder served.
 
@@ -82,19 +84,20 @@
 
 ### Configuration file
 
-Settings can be specified in a JSON file (`configuration.json`) located in the same folder as the server executable.
+Settings can be specified in a JSON file (`configuration.json`) located in the same folder as the server script.
 
 The file should contain an object with any of the following (optional) properties …
 
 ```json
 {
   "certificate_name": string,
-  "file_name_extension_media_type_map": [ "${file_name_extension}": string, "${media_type}": string ][],
+  "file_name_extension_media_type_map": [ "`${file_name_extension}`", "`${media_type}`" ][],
   "host_name": string,
   "port_number": number,
   "root_folder": string
 }
 ```
+
 > **Note:** Settings in the configuration file are overriden by [command-line arguments](#command-line-arguments), if specified.
 
 ---
@@ -119,6 +122,4 @@ The file should contain an object with any of the following (optional) propertie
 
 _Powered by [`Koa`](https://koajs.com/)._
 
-Written by [Nate Gehringer](mailto:ngehringer@gmail.com).
-
-© 2020 [Backwater Systems](https://backwater.systems)
+© 2020 – 2021 [Nate Gehringer](mailto:ngehringer@gmail.com) ◦ [Backwater Systems](https://backwater.systems/)
