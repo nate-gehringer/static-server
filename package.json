@@ -6,7 +6,7 @@
   "bin": "dist/static-server.js",
   "description": "`static-server.js`: A fine HTTP(S) server for static content by Backwater Systems",
   "homepage": "https://backwater.systems/",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "name": "@backwater-systems/static-server",
   "repository": {
     "type": "git",
