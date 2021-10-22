@@ -4,7 +4,7 @@
     "name": "Nate Gehringer"
   },
   "bin": "dist/static-server.js",
-  "description": "`static-server.js`: A fine HTTP(S) server for static content",
+  "description": "`static-server.js`: A fine HTTP(S) development server for static content",
   "homepage": "https://backwater.systems/",
   "license": "Apache-2.0",
   "name": "@backwater-systems/static-server",
@@ -15,7 +15,7 @@
   "type": "module",
   "version": "1.0.0",
   "dependencies": {
-    "koa": "^2.13.3",
+    "koa": "^2.13.4",
     "koa-conditional-get": "^3.0.0",
     "koa-etag": "^4.0.0",
     "koa-static": "^5.0.0"

@@ -1,13 +1,13 @@
 # Backwater Systems ◦ `static-server.js`
 
-> A fine HTTP(S) server for static content
+> A fine HTTP(S) development server for static content
 
 ---
 
 ## Usage
 
 ```sh
-[NODE_ENV=development] ./static-server.js \
+NODE_ENV=development ./static-server.js \
   . `# [root_folder]` \
   localhost `# [host_name]` \
   8020 `# [port_number]` \
@@ -66,7 +66,7 @@
 
 ### Environment variables
 
-- The `NODE_ENV` environment variable is respected if its value is …
+- The `NODE_ENV` environment variable is respected and used for the `Koa.env` property if its value is …
 
     - `development` (default)
     - `production`
@@ -84,7 +84,7 @@
 
 ### Configuration file
 
-Settings can be specified in a JSON file (`configuration.json`) located in the same folder as the server script.
+Settings can be specified in a JSON file (`static-server.configuration.json`) located in the same folder as the server script.
 
 The file should contain an object with any of the following (optional) properties …
 

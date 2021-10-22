@@ -2,7 +2,7 @@
 /*
         …[  [ … [    [[∞]]    ] … ]  ]…
     # Backwater Systems ◦ `static-server.js`
-    A fine HTTP(S) server for static content
+  A fine HTTP(S) development server for static content
     _Powered by [`Koa`](https://koajs.com/)_
                       ---
   © 2020 – 2021 [Nate Gehringer](mailto:ngehringer@gmail.com)
@@ -10,7 +10,7 @@
   [Backwater Systems](https://backwater.systems/)
         …[  [ … [    [[∞]]    ] … ]  ]…
 
-  **Usage:** `[NODE_ENV=development] ./static-server.js . `# [root_folder]` localhost `# [host_name]` 8020 `# [port_number]` localhost `# [certificate_name]`
+  **Usage:** `NODE_ENV=development ./static-server.js . `# [root_folder]` localhost `# [host_name]` 8020 `# [port_number]` localhost `# [certificate_name]`
 */
 
 
@@ -96,7 +96,7 @@ const utilities = Object.freeze({
     const configurationFromCommandLineArguments = await utilities.readConfigurationFromCommandLineArguments();
 
     /**
-     * The server’s configuration as specified in the `configuration.json` file
+     * The server’s configuration as specified in the `static-server.configuration.json` file
      */
     const configurationFromFile = await utilities.readConfigurationFromFile();
 
@@ -253,10 +253,15 @@ const utilities = Object.freeze({
   readConfigurationFromFile: async () => {
     try {
       /**
+       * JSON configuration file name
+       */
+      const CONFIGURATION_FILE_NAME = 'static-server.configuration.json';
+
+      /**
        * JSON configuration data
        */
       const configurationFromFileString = await fs.readFile(
-        path.join(MODULE_FOLDER, 'configuration.json'),
+        path.join(MODULE_FOLDER, CONFIGURATION_FILE_NAME),
         {
           encoding: 'utf8'
         }
@@ -281,7 +286,7 @@ const utilities = Object.freeze({
       if (
         (typeof configurationFromFile !== 'object')
         || (configurationFromFile === null)
-      ) throw new TypeError('configuration.json');
+      ) throw new TypeError(CONFIGURATION_FILE_NAME);
 
       // sanitize and validate the configuration data
 
