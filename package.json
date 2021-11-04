@@ -25,11 +25,11 @@
     "del-cli": "^4.0.0"
   },
   "scripts": {
-    "build": "npm run clean:build && npm run build:javascript && npm run build:assets",
-    "build:javascript": "cpy '**/*.js' '../dist/' --cwd 'src/' --parents",
-    "build:assets": "cpy '**/*.json' '../dist/' --cwd 'src/' --parents",
-    "clean": "npm run clean:build",
-    "clean:build": "del-cli dist/",
+    "clean": "npm run clean:dist",
+    "clean:dist": "del-cli dist/",
+    "prepare": "npm run clean:dist && npm run prepare:javascript && npm run prepare:assets",
+    "prepare:javascript": "cpy '**/*.js' '../dist/' --cwd 'src/' --parents",
+    "prepare:assets": "cpy '**/*.json' '../dist/' --cwd 'src/' --parents",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
