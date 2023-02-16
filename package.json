@@ -1,10 +1,10 @@
 {
   "author": {
-    "email": "ngehringer@gmail.com",
+    "email": "nate@backwater.systems",
     "name": "Nate Gehringer"
   },
   "bin": "dist/static-server.js",
-  "description": "`static-server.js`: A fine HTTP(S) development server for static content",
+  "description": "`static-server.js`: ❝A fine HTTP(S) development server for static content❞",
   "homepage": "https://backwater.systems/",
   "license": "Apache-2.0",
   "name": "@backwater-systems/static-server",
@@ -15,21 +15,21 @@
   "type": "module",
   "version": "1.0.0",
   "dependencies": {
-    "koa": "^2.13.4",
-    "koa-conditional-get": "^3.0.0",
-    "koa-etag": "^4.0.0",
-    "koa-static": "^5.0.0"
+    "koa": "2.14.1",
+    "koa-conditional-get": "3.0.0",
+    "koa-etag": "4.0.0",
+    "koa-static": "5.0.0"
   },
   "devDependencies": {
-    "cpy-cli": "^3.1.1",
-    "del-cli": "^4.0.0"
+    "cpy-cli": "4.2.0",
+    "del-cli": "5.0.0"
   },
   "scripts": {
     "clean": "npm run clean:dist",
     "clean:dist": "del-cli dist/",
     "prepare": "npm run clean:dist && npm run prepare:javascript && npm run prepare:assets",
-    "prepare:javascript": "cpy '**/*.js' '../dist/' --cwd 'src/' --parents",
-    "prepare:assets": "cpy '**/*.json' '../dist/' --cwd 'src/' --parents",
+    "prepare:assets": "cpy 'src/**/*.json' 'dist/'",
+    "prepare:javascript": "cpy 'src/**/*.js' 'dist/'",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
