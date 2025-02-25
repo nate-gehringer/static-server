@@ -124,4 +124,4 @@ The file should contain an object with any of the following (optional) propertie
 
 ---
 
-© 2020 – 2023 [Nate Gehringer](mailto:nate@backwater.systems) ◦ [Backwater Systems](https://backwater.systems/)
+© 2020 – 2025 [Nate Gehringer](mailto:nate@backwater.systems) ◦ [Backwater Systems](https://backwater.systems/)
