@@ -21,8 +21,8 @@ import path from 'path';
 
 import Koa from 'koa';
 import koaConditionalGet from 'koa-conditional-get';
-import koaEtag from 'koa-etag';
-import koaStatic from 'koa-static';
+import koaEtag from '@koa/etag';
+import { send as koaSend } from '@koa/send';
 
 
 /**
@@ -556,7 +556,18 @@ app.use(
 );
 
 // serve the specified root folder as static content
-app.use( koaStatic(configuration.ROOT_FOLDER) );
+app.use(
+	async (ctx) => {
+		await koaSend(
+			ctx,
+			ctx.path,
+			{
+				index: 'index.html',
+				root: configuration.ROOT_FOLDER
+			}
+		);
+	}
+);
 
 /**
  * The Node.js `https` or `http` `Server` instance underlying the `Koa` server instance

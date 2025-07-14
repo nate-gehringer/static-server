@@ -1,35 +1,35 @@
 {
-  "author": {
-    "email": "nate@backwater.systems",
-    "name": "Nate Gehringer"
-  },
-  "bin": "dist/static-server.js",
-  "description": "`static-server.js`: A fine HTTP(S) development server for static content",
-  "homepage": "https://code.backwater.systems/#static-server",
-  "license": "Apache-2.0",
-  "name": "@backwater-systems/static-server",
-  "repository": {
-    "type": "git",
-    "url": "https://code.backwater.systems/backwater-systems/static-server.git/"
-  },
-  "type": "module",
-  "version": "1.0.0",
-  "dependencies": {
-    "koa": "3.0.0",
-    "koa-conditional-get": "3.0.0",
-    "koa-etag": "4.0.0",
-    "koa-static": "5.0.0"
-  },
-  "devDependencies": {
-    "cpy-cli": "5.0.0",
-    "del-cli": "6.0.0"
-  },
-  "scripts": {
-    "clean": "npm run clean:dist",
-    "clean:dist": "del-cli dist/",
-    "prepare": "npm run clean:dist && npm run prepare:javascript && npm run prepare:assets",
-    "prepare:assets": "cpy 'src/**/*.json' 'dist/'",
-    "prepare:javascript": "cpy 'src/**/*.js' 'dist/'",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+	"author": {
+		"email": "nate@backwater.systems",
+		"name": "Nate Gehringer"
+	},
+	"bin": "dist/static-server.js",
+	"description": "`static-server.js`: A fine HTTP(S) development server for static content",
+	"homepage": "https://code.backwater.systems/#static-server",
+	"license": "Apache-2.0",
+	"name": "@backwater-systems/static-server",
+	"repository": {
+		"type": "git",
+		"url": "https://code.backwater.systems/backwater-systems/static-server.git/"
+	},
+	"type": "module",
+	"version": "1.0.0",
+	"dependencies": {
+		"@koa/etag": "5.0.1",
+		"@koa/send": "6.0.0",
+		"koa": "3.0.0",
+		"koa-conditional-get": "3.0.0"
+	},
+	"devDependencies": {
+		"cpy-cli": "5.0.0",
+		"del-cli": "6.0.0"
+	},
+	"scripts": {
+		"clean": "npm run clean:dist",
+		"clean:dist": "del-cli dist/",
+		"prepare": "npm run clean:dist && npm run prepare:javascript && npm run prepare:assets",
+		"prepare:assets": "cpy 'src/**/*.json' 'dist/'",
+		"prepare:javascript": "cpy 'src/**/*.js' 'dist/'",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
 }
