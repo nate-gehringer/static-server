@@ -10,7 +10,7 @@
   [Backwater Systems](https://backwater.systems/)
         …[  [ … [    [[∞]]    ] … ]  ]…
 
-  **Usage:** `NODE_ENV=development ./static-server.js . `# [root_folder]` localhost `# [host_name]` 8020 `# [port_number]` localhost `# [certificate_name]`
+  **Usage:** `NODE_ENV=development ./static-server.js . `# [root_folder]` localhost `# [host_name]` 8020 `# [port_number]` localhost `# [certificate_name]` '{}' `# [headers]` '{}' `# [file_name_extension_media_types]``
 */
 
 
@@ -93,7 +93,7 @@ const utilities = Object.freeze({
 		/**
 		 * The server’s configuration as specified in the command-line arguments
 		 */
-		const configurationFromCommandLineArguments = await utilities.readConfigurationFromCommandLineArguments();
+		const configurationFromCommandLineArguments = utilities.readConfigurationFromCommandLineArguments();
 
 		/**
 		 * The server’s configuration as specified in the `static-server.configuration.json` file
@@ -131,13 +131,25 @@ const utilities = Object.freeze({
 			,
 
 			/**
-			 * A `Map` of custom file name extension / media type specifications (used to set / override the `Content-Type` HTTP header)
+			 * An `Object` of custom file name extension / media type specifications (used to set / override the `Content-Type` HTTP header)
 			 *
-			 * @default new Map()
+			 * @default {}
 			 */
-			FILE_NAME_EXTENSION_MEDIA_TYPE_MAP: (
-				configurationFromFile?.FILE_NAME_EXTENSION_MEDIA_TYPE_MAP
-				?? DEFAULTS.FILE_NAME_EXTENSION_MEDIA_TYPE_MAP
+			FILE_NAME_EXTENSION_MEDIA_TYPES: (
+				configurationFromCommandLineArguments.FILE_NAME_EXTENSION_MEDIA_TYPES
+				?? configurationFromFile?.FILE_NAME_EXTENSION_MEDIA_TYPES
+				?? { ...DEFAULTS.FILE_NAME_EXTENSION_MEDIA_TYPES }
+			),
+
+			/**
+			 * An `Object` of custom HTTP headers
+			 *
+			 * @default {}
+			 */
+			HEADERS: (
+				configurationFromCommandLineArguments.HEADERS
+				?? configurationFromFile?.HEADERS
+				?? { ...DEFAULTS.HEADERS }
 			),
 
 			/**
@@ -242,8 +254,22 @@ const utilities = Object.freeze({
 	 */
 	readConfigurationFromCommandLineArguments: () => ({
 		CERTIFICATE_NAME: validation.validateCertificateName(process.argv[5]),
+		FILE_NAME_EXTENSION_MEDIA_TYPES: validation.validateHeaders(
+			(typeof process.argv[7] === 'string')
+				? JSON.parse(process.argv[7])
+				: null
+		),
+		HEADERS: validation.validateHeaders(
+			(typeof process.argv[6] === 'string')
+				? JSON.parse(process.argv[6])
+				: null
+		),
 		HOST_NAME: validation.validateHostName(process.argv[3]),
-		PORT_NUMBER: validation.validatePortNumber( (typeof process.argv[4] === 'string') ? Number.parseInt(process.argv[4], 10) : null ),
+		PORT_NUMBER: validation.validatePortNumber(
+			(typeof process.argv[4] === 'string')
+				? Number.parseInt(process.argv[4], 10)
+				: null
+		),
 		ROOT_FOLDER: validation.validateRootFolder(process.argv[2])
 	}),
 
@@ -268,17 +294,7 @@ const utilities = Object.freeze({
 			);
 
 			/**
-			 * Parsed JSON configuration data, nominally of the type …
-			 *
-			 * ```json
-			 * {
-			 *   "certificate_name": string,
-			 *   "file_name_extension_media_type_map": [ "${file_name_extension}": string, "${media_type}": string ][],
-			 *   "host_name": string,
-			 *   "port_number": number,
-			 *   "root_folder": string
-			 * }
-			 * ```
+			 * Parsed JSON configuration data
 			 */
 			const configurationFromFile = JSON.parse(configurationFromFileString);
 
@@ -292,7 +308,8 @@ const utilities = Object.freeze({
 
 			const {
 				certificate_name: certificateName,
-				file_name_extension_media_type_map: fileNameExtensionMediaTypeMap,
+				file_name_extension_media_types: fileNameExtensionMediaTypes,
+				headers: headers,
 				host_name: hostName,
 				port_number: portNumber,
 				root_folder: rootFolder
@@ -300,7 +317,8 @@ const utilities = Object.freeze({
 
 			return {
 				CERTIFICATE_NAME: validation.validateCertificateName(certificateName),
-				FILE_NAME_EXTENSION_MEDIA_TYPE_MAP: validation.validateFileNameExtensionMediaTypeMap(fileNameExtensionMediaTypeMap),
+				FILE_NAME_EXTENSION_MEDIA_TYPES: validation.validateFileNameExtensionMediaTypes(fileNameExtensionMediaTypes),
+				HEADERS: validation.validateHeaders(headers),
 				HOST_NAME: validation.validateHostName(hostName),
 				PORT_NUMBER: validation.validatePortNumber(portNumber),
 				ROOT_FOLDER: validation.validateRootFolder(rootFolder)
@@ -332,23 +350,38 @@ const validation = Object.freeze({
 	,
 
 	/**
-	 * Validates that the specified file name extension / media type map is of the type `[ string, string ][]`.
+	 * Validates that the specified file name extension / media type map is of the type `{ "string": "string" }`.
 	 */
-	validateFileNameExtensionMediaTypeMap: (fileNameExtensionMediaTypeMap) => new Map(
-		(
-			Array.isArray(fileNameExtensionMediaTypeMap)
-				? fileNameExtensionMediaTypeMap
-				: []
-		).filter(
-			(fileNameExtensionMediaType) => (
-				Array.isArray(fileNameExtensionMediaType)
-				&& (typeof fileNameExtensionMediaType[0] === 'string')
-				&& (fileNameExtensionMediaType[0] !== '')
-				&& (typeof fileNameExtensionMediaType[1] === 'string')
-				&& (fileNameExtensionMediaType[1] !== '')
+	validateFileNameExtensionMediaTypes: (fileNameExtensionMediaTypes) => (fileNameExtensionMediaTypes instanceof Object)
+		? Object.fromEntries(
+			Object.entries(fileNameExtensionMediaTypes).filter(
+				([ fileNameExtension, mediaType ]) => (
+					(typeof fileNameExtension === 'string')
+					&& (fileNameExtension !== '')
+					&& (typeof mediaType === 'string')
+					&& (mediaType !== '')
+				)
 			)
 		)
-	),
+		: null
+	,
+
+	/**
+	 * Validates that the specified HTTP header map is of the type `{ "string": "string" }`.
+	 */
+	validateHeaders: (headers) => (headers instanceof Object)
+		? Object.fromEntries(
+			Object.entries(headers).filter(
+				([ headerName, headerValue ]) => (
+					(typeof headerName === 'string')
+					&& (headerName !== '')
+					&& (typeof headerValue === 'string')
+					&& (headerValue !== '')
+				)
+			)
+		)
+		: null
+	,
 
 	/**
 	 * Validates that the specified host name is a non-empty `string`.
@@ -396,7 +429,8 @@ const validation = Object.freeze({
 const DEFAULTS = Object.freeze({
 	CERTIFICATE_NAME: 'localhost',
 	ENVIRONMENT: 'development',
-	FILE_NAME_EXTENSION_MEDIA_TYPE_MAP: new Map(),
+	FILE_NAME_EXTENSION_MEDIA_TYPES: Object.freeze({}),
+	HEADERS: Object.freeze({}),
 	HOST_NAME: 'localhost',
 	PORT_NUMBER: 8020,
 	ROOT_FOLDER: '.'
@@ -523,6 +557,17 @@ app.use( koaConditionalGet() );
 // enable HTTP `ETag` support
 app.use( koaEtag() );
 
+// set custom HTTP headers, if necessary
+if (Object.keys(configuration.HEADERS).length > 0) {
+	app.use(
+		async (ctx, next) => {
+			ctx.set(configuration.HEADERS);
+
+			await next();
+		}
+	);
+}
+
 // set the `Content-Type` HTTP header
 app.use(
 	async (ctx, next) => {
@@ -545,8 +590,8 @@ app.use(
 			ctx.type = 'text/plain';
 		}
 		// … mapped file name extension: use the media type value specified in the map
-		else if ( configuration.FILE_NAME_EXTENSION_MEDIA_TYPE_MAP.has(fileNameExtension) ) {
-			ctx.type = configuration.FILE_NAME_EXTENSION_MEDIA_TYPE_MAP.get(fileNameExtension);
+		else if (fileNameExtension in configuration.FILE_NAME_EXTENSION_MEDIA_TYPES) {
+			ctx.type = configuration.FILE_NAME_EXTENSION_MEDIA_TYPES[fileNameExtension];
 		}
 		// … unmapped file name extension: use `Koa`’s internal file name extension–lookup mechanism (<https://github.com/koajs/koa/blob/master/docs/api/response.md#responsetype-1>)
 		else {

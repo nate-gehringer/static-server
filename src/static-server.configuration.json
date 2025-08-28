@@ -1,5 +1,8 @@
 {
-  "file_name_extension_media_type_map": [
-    [ "mustache", "text/plain" ]
-  ]
+	"certificate_name": "localhost",
+	"file_name_extension_media_types": {},
+	"headers": {},
+	"host_name": "localhost",
+	"port_number": 8020,
+	"root_folder": "."
 }
