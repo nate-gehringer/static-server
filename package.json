@@ -15,9 +15,9 @@
 	"type": "module",
 	"version": "1.0.0",
 	"dependencies": {
-		"@koa/etag": "5.0.1",
+		"@koa/etag": "5.0.2",
 		"@koa/send": "6.0.0",
-		"koa": "3.0.3",
+		"koa": "3.1.1",
 		"koa-conditional-get": "3.0.0"
 	},
 	"devDependencies": {

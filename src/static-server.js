@@ -5,7 +5,7 @@
   ❝A fine HTTP(S) development server for static content❞
     _Powered by [`Koa`](https://koajs.com/)_
                       ---
-  © 2020 – 2025 [Nate Gehringer](mailto:nate@backwater.systems)
+  © 2026 [Nate Gehringer](mailto:nate@backwater.systems)
                        ◦
   [Backwater Systems](https://backwater.systems/)
         …[  [ … [    [[∞]]    ] … ]  ]…

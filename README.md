@@ -212,4 +212,4 @@ The configuration file should validate against the following [JSON Schema](https
 
 ---
 
-© 2020 – 2025 [Nate Gehringer](mailto:nate@backwater.systems) ◦ [Backwater Systems](https://backwater.systems/)
+© 2026 [Nate Gehringer](mailto:nate@backwater.systems) ◦ [Backwater Systems](https://backwater.systems/)
